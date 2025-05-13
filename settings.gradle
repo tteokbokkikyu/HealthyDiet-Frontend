@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HD2"
+rootProject.name = "healthydiet"
 include ':app'

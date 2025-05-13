@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.hd2'
+    namespace 'com.example.healthydiet'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.hd2"
+        applicationId "com.example.healthydiet"
         minSdk 24
         targetSdk 34
         versionCode 1
