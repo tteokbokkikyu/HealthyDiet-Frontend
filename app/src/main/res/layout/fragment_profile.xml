@@ -15,12 +15,13 @@
         android:layout_marginEnd="64dp"
         android:contentDescription="Profile Image"
         android:src="@drawable/avater"
-        app:civ_border_color="#FFFFFF"
         app:civ_border_width="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLayout"
-        app:layout_constraintEnd_toStartOf="@+id/nicknameTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    app:civ_border_color="#FFFFFF"
+    app:layout_constraintBottom_toTopOf="@+id/buttonLayout"
+    app:layout_constraintEnd_toStartOf="@+id/nicknameTextView"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    />
 
 
     <!-- 昵称 -->

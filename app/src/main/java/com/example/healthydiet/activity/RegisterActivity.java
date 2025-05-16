@@ -261,4 +261,3 @@ public class RegisterActivity extends AppCompatActivity {
         webSocketManager.unregisterCallback(WebSocketMessageType.REGISTER);
     }
 }
-

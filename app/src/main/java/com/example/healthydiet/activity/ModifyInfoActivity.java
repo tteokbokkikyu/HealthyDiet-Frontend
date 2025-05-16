@@ -195,4 +195,3 @@ public class ModifyInfoActivity extends AppCompatActivity {
         webSocketManager.unregisterCallback(WebSocketMessageType.UPDATE_USER);
     }
 }
-

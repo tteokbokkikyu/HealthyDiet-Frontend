@@ -80,6 +80,7 @@
         app:layout_constraintTop_toBottomOf="@id/input_password" />
 
 
+
     <Button
         android:id="@+id/register_button"
         style="@style/Widget.AppCompat.Button.Colored"
