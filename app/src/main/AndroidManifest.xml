@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Healthydiet"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.HomeActivity"></activity>
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.ExerciseListActivity" />
+        <activity android:name=".activity.ModifyInfoActivity"/>
+        <activity android:name=".activity.AllExerciseRecordActivity" />
+
+        <activity android:name=".activity.AdminHomepage"/>
+
     </application>
 
 </manifest>

@@ -168,24 +168,7 @@ public class WebSocketManager {
                     }
                     return;
                 }
-                case EXERCISE_RECORD_GET_SUCCESS: {
-                    String msg = get.getString("data");
-                    Log.d("WebSocket", "Received array message, treating as exercise record list");
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.EXERCISE_RECORD_GET);
-                    if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
-                    }
-                    return;
-                }
-                case EXERCISE_LIST_SUCCESS: {
-                    String msg = get.getString("data");
-                    Log.d("WebSocket", "Received array message, treating as exercise list");
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.EXERCISE_LIST);
-                    if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
-                    }
-                    return;
-                }
+
 
                 case UPDATE_USER_SUCCESS:
                 case UPDATE_USER_FAIL: {
@@ -209,46 +192,7 @@ public class WebSocketManager {
                     return;
                 }
 
-                case POST_GET_SUCCESS:{
-                    String msg = get.getString("data");
-                    Log.d("WebSocket", "Received array message, treating as post list");
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.GET_POST);
-                    if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
-                    }
-                    return;
-                }
-                case POST_GET_FAIL:{
-                    Log.d("WebSocket", "获取帖子失败");
-                }
-                case POST_CREATE_SUCCESS:{
-                    String msg = get.getString("message");
-                    Log.d("WebSocket", "Received create post message:"+msg);
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.ADD_POST);
-                    if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
-                    }
-                    return;
-                }
 
-                case COMMENT_CREATE_SUCCESS:{
-                    String msg = get.getString("message");
-                    Log.d("WebSocket", "Received create comment message:"+msg);
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.ADD_COMMENT);
-                    if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
-                    }
-                    return;
-                }
-                case COMMENT_GET_SUCCESS:{
-                    String msg = get.getString("data");
-                    Log.d("WebSocket", "Received array message, treating as comment list");
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.GET_POSTCOMMENTS);
-                    if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
-                    }
-                    return;
-                }
                     default:
                         break;
 
