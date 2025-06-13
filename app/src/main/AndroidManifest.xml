@@ -40,6 +40,9 @@
         <activity android:name=".activity.DietAnalysisActivity"/>
         <activity android:name=".activity.ReminderActivity" />
         <activity android:name=".activity.NotificationListActivity"/>
+        <activity android:name=".activity.AddPostActivity"/>
+        <activity android:name=".activity.AnnounceActivity"/>
+        <activity android:name=".activity.PostDetailActivity"/>
     </application>
 
 </manifest>

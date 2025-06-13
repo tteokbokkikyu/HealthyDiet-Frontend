@@ -20,5 +20,14 @@ public class WebSocketMessageType {
     public static final String GET_POSTCOMMENTS="getPostComments";
 
     public static final String WEIGHT_RECORD_GET = "getUserWeights";
+
+    public static final String GET_USER_NOTIFICATION="getUserNotifications";
+
+    public static final String GET_ALL_USERS="getAllUsers";
+    public static final String BLOCK_USER="blockUser";
+    public static final String UNBLOCK_USER="unblockUser";
+    public static final String GET_ALL_POSTS="getAllPosts";
+    public static final String GET_ALL_COMMENTS="getAllComments";
+
     // 添加其他消息类型...
 } 
