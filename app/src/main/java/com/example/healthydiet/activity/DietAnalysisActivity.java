@@ -1,4 +1,6 @@
 package com.example.healthydiet.activity;
 
-public class DietAnalysisActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DietAnalysisActivity extends AppCompatActivity {
 }

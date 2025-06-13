@@ -1,4 +1,6 @@
 package com.example.healthydiet.activity;
 
-public class AdminHomepage {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class AdminHomepage extends AppCompatActivity {
 }

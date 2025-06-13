@@ -1,4 +1,6 @@
 package com.example.healthydiet.activity;
 
-public class NotificationListActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class NotificationListActivity extends AppCompatActivity {
 }
