@@ -169,6 +169,24 @@ public class WebSocketManager {
                     return;
                 }
 
+                case EXERCISE_RECORD_GET_SUCCESS: {
+                    String msg = get.getString("data");
+                    Log.d("WebSocket", "Received array message, treating as exercise record list");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.EXERCISE_RECORD_GET);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
+                case EXERCISE_LIST_SUCCESS: {
+                    String msg = get.getString("data");
+                    Log.d("WebSocket", "Received array message, treating as exercise list");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.EXERCISE_LIST);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
 
                 case UPDATE_USER_SUCCESS:
                 case UPDATE_USER_FAIL: {
@@ -234,6 +252,55 @@ public class WebSocketManager {
                 }
 
                 //管理员...
+                case GET_ALL_USERS_SUCCESS:{
+                    String msg = get.getString("data");
+                    Log.d("WebSocket", "Received array message, treating as user list");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.GET_ALL_USERS);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
+
+                case BLOCK_USER_SUCCESS:{
+                    String msg = get.getString("message");
+                    Log.d("WebSocket", "Received block user message:"+msg);
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.BLOCK_USER);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
+
+                case UNBLOCK_USER_SUCCESS:{
+                    String msg = get.getString("message");
+                    Log.d("WebSocket", "Received unblock user message:"+msg);
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.UNBLOCK_USER);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
+
+                case POST_GET_ALL_SUCCESS:{
+                    String msg = get.getString("data");
+                    Log.d("WebSocket", "Received array message, treating as post list");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.GET_ALL_POSTS);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
+
+                case COMMENT_GET_ALL_SUCCESS:{
+                    String msg = get.getString("data");
+                    Log.d("WebSocket", "Received array message, treating as all comment list");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.GET_ALL_COMMENTS);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
 
                 case NOTIFICATION_GET_SUCCESS:{
                     String msg = get.getString("data");
