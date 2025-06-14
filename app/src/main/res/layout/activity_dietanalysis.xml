@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/t8">
+    android:background="@drawable/b6">
 
     <!-- 标题栏 -->
     <androidx.appcompat.widget.Toolbar
