@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,6 +27,25 @@ public class AnnounceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_announce);
+
+        // 初始化 Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // 设置返回按钮的点击事件
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);  // 显示返回按钮
+            getSupportActionBar().setDisplayShowHomeEnabled(true);  // 启用返回按钮图标
+        }
+
+        // 返回按钮的点击监听器
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(AnnounceActivity.this, AdminHomepage.class);
+            intent.putExtra("fragment_key", "HealthyFragment");
+
+            startActivity(intent);
+        });
+
 
         // 获取输入框
         titleEditText = findViewById(R.id.contentEditText);

@@ -30,11 +30,21 @@ public class ReminderReceiver extends BroadcastReceiver {
         String notificationMessage;
         if (type.equals("1")) {
             String mealType = intent.getStringExtra("mealType");
-            notificationMessage = "createNotification:{" +
-                    "\"data\": \"该吃" + mealType + "啦！\"," +
-                    "\"type\": \"1\"," +
-                    "\"sent\": 1" +
-                    "}";
+            if(mealType=="锻炼"){
+                notificationMessage = "createNotification:{" +
+                        "\"data\": \"该" + mealType + "啦！\"," +
+                        "\"type\": \"1\"," +
+                        "\"sent\": 1" +
+                        "}";
+            }
+            else{
+                notificationMessage = "createNotification:{" +
+                        "\"data\": \"该吃" + mealType + "啦！\"," +
+                        "\"type\": \"1\"," +
+                        "\"sent\": 1" +
+                        "}";
+            }
+
         } else {
             notificationMessage = "createNotification:{" +
                     "\"data\": \"该喝水啦！\"," +

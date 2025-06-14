@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class ReminderActivity extends AppCompatActivity {
-    private TextView breakfastTimeText, lunchTimeText, dinnerTimeText;
+    private TextView breakfastTimeText, lunchTimeText, dinnerTimeText,exerciseTimeText;
     private TextView waterIntervalText;
     private Button saveButton;
     private WebSocketManager webSocketManager;
@@ -44,16 +44,17 @@ public class ReminderActivity extends AppCompatActivity {
     private static final String PREF_BREAKFAST = "breakfast_time";
     private static final String PREF_LUNCH = "lunch_time";
     private static final String PREF_DINNER = "dinner_time";
+    private static final String PREF_EXERCISE="exercise_time";
     private static final String PREF_WATER_HOUR = "water_interval_hour";
     private static final String PREF_WATER_MINUTE = "water_interval_minute";
     private SeekBar waterIntervalHourSeekBar;
     private SeekBar waterIntervalMinuteSeekBar;
-    private Switch breakfastSwitch, lunchSwitch, dinnerSwitch, waterSwitch;
+    private Switch breakfastSwitch, lunchSwitch, dinnerSwitch, waterSwitch,exerciseSwitch;
     private static final String PREF_BREAKFAST_ENABLED = "breakfast_enabled";
     private static final String PREF_LUNCH_ENABLED = "lunch_enabled";
     private static final String PREF_DINNER_ENABLED = "dinner_enabled";
     private static final String PREF_WATER_ENABLED = "water_enabled";
-
+    private static final String PREF_EXERCISE_ENABLED="exercise_enabled";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +107,7 @@ public class ReminderActivity extends AppCompatActivity {
         lunchTimeText = findViewById(R.id.lunchTimeText);
         dinnerTimeText = findViewById(R.id.dinnerTimeText);
         waterIntervalText = findViewById(R.id.waterIntervalText);
+        exerciseTimeText=findViewById(R.id.exerciseTimeText);
         saveButton = findViewById(R.id.saveButton);
         waterIntervalHourSeekBar = findViewById(R.id.waterIntervalHourSeekBar);
         waterIntervalMinuteSeekBar = findViewById(R.id.waterIntervalMinuteSeekBar);
@@ -113,6 +115,7 @@ public class ReminderActivity extends AppCompatActivity {
         lunchSwitch = findViewById(R.id.lunchSwitch);
         dinnerSwitch = findViewById(R.id.dinnerSwitch);
         waterSwitch = findViewById(R.id.waterSwitch);
+        exerciseSwitch=findViewById(R.id.exerciseSwitch);
 
         setupWaterIntervalListeners();
 
@@ -122,13 +125,15 @@ public class ReminderActivity extends AppCompatActivity {
                 showTimePicker("午餐", lunchTimeText));
         findViewById(R.id.dinnerButton).setOnClickListener(v ->
                 showTimePicker("晚餐", dinnerTimeText));
-
+        findViewById(R.id.exerciseButton).setOnClickListener(v ->
+                showTimePicker("锻炼", exerciseTimeText));
         // 加载开关状态
         if (sharedPreferences != null) {
             breakfastSwitch.setChecked(sharedPreferences.getBoolean(PREF_BREAKFAST_ENABLED, false));
             lunchSwitch.setChecked(sharedPreferences.getBoolean(PREF_LUNCH_ENABLED, false));
             dinnerSwitch.setChecked(sharedPreferences.getBoolean(PREF_DINNER_ENABLED, false));
             waterSwitch.setChecked(sharedPreferences.getBoolean(PREF_WATER_ENABLED, false));
+            exerciseSwitch.setChecked(sharedPreferences.getBoolean(PREF_EXERCISE_ENABLED, false));
         }
 
         // 添加开关状态改变监听器
@@ -149,6 +154,13 @@ public class ReminderActivity extends AppCompatActivity {
         dinnerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked && dinnerTimeText.getText().toString().equals("未设置")) {
                 Toast.makeText(this, "请先设置晚餐时间", Toast.LENGTH_SHORT).show();
+                buttonView.setChecked(false);
+            }
+        });
+
+        exerciseSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked && exerciseTimeText.getText().toString().equals("未设置")) {
+                Toast.makeText(this, "请先设置锻炼时间", Toast.LENGTH_SHORT).show();
                 buttonView.setChecked(false);
             }
         });
@@ -214,6 +226,7 @@ public class ReminderActivity extends AppCompatActivity {
         String dinnerTime = sharedPreferences.getString(PREF_DINNER, "未设置");
         int waterHour = sharedPreferences.getInt(PREF_WATER_HOUR, 1);
         int waterMinute = sharedPreferences.getInt(PREF_WATER_MINUTE, 0);
+        String exerciseTime=sharedPreferences.getString(PREF_EXERCISE,"未设置");
 
         Log.d("ReminderActivity", "Loaded times - Breakfast: " + breakfastTime
                 + ", Lunch: " + lunchTime
@@ -240,6 +253,13 @@ public class ReminderActivity extends AppCompatActivity {
             dinnerTimeText.setText("未设置");
         }
 
+        if (!exerciseTime.equals("未设置")) {
+            String[] time = exerciseTime.split(":");
+            exerciseTimeText.setText(String.format("%02d:%02d", Integer.parseInt(time[0]), Integer.parseInt(time[1])));
+        } else {
+            exerciseTimeText.setText("未设置");
+        }
+
         waterIntervalHourSeekBar.setProgress(waterHour);
         waterIntervalMinuteSeekBar.setProgress(waterMinute);
         updateWaterIntervalText();
@@ -262,23 +282,28 @@ public class ReminderActivity extends AppCompatActivity {
             Toast.makeText(this, "请先设置晚餐时间", Toast.LENGTH_SHORT).show();
             dinnerSwitch.setChecked(false);
         }
-
+        if (exerciseSwitch.isChecked() && exerciseTimeText.getText().toString().equals("未设置")) {
+            Toast.makeText(this, "请先设置锻炼时间", Toast.LENGTH_SHORT).show();
+            exerciseSwitch.setChecked(false);
+        }
         // 保存开关状态
         editor.putBoolean(PREF_BREAKFAST_ENABLED, breakfastSwitch.isChecked());
         editor.putBoolean(PREF_LUNCH_ENABLED, lunchSwitch.isChecked());
         editor.putBoolean(PREF_DINNER_ENABLED, dinnerSwitch.isChecked());
         editor.putBoolean(PREF_WATER_ENABLED, waterSwitch.isChecked());
-
+        editor.putBoolean(PREF_EXERCISE_ENABLED, exerciseSwitch.isChecked());
         // 保存时间设置
         String breakfastTime = breakfastTimeText.getText().toString();
         String lunchTime = lunchTimeText.getText().toString();
         String dinnerTime = dinnerTimeText.getText().toString();
+        String exerciseTime = exerciseTimeText.getText().toString();
 
         editor.putString(PREF_BREAKFAST, breakfastTime);
         editor.putString(PREF_LUNCH, lunchTime);
         editor.putString(PREF_DINNER, dinnerTime);
         editor.putInt(PREF_WATER_HOUR, waterIntervalHourSeekBar.getProgress());
         editor.putInt(PREF_WATER_MINUTE, waterIntervalMinuteSeekBar.getProgress());
+        editor.putString(PREF_EXERCISE,exerciseTime);
 
         editor.apply();
 
@@ -306,6 +331,12 @@ public class ReminderActivity extends AppCompatActivity {
 
         if (dinnerSwitch.isChecked()) {
             saveMealReminder("晚餐", dinnerTimeText.getText().toString(), 3);
+        } else {
+            cancelReminder(3);
+        }
+
+        if (exerciseSwitch.isChecked()) {
+            saveMealReminder("锻炼", exerciseTimeText.getText().toString(), 3);
         } else {
             cancelReminder(3);
         }
@@ -352,7 +383,12 @@ public class ReminderActivity extends AppCompatActivity {
         Log.d("ReminderActivity", "Setting alarm for: " + calendar.getTime() + " (current time: " + new Date() + ")");
 
         Intent intent = new Intent(this, ReminderReceiver.class);
-        intent.putExtra("message", "该吃" + mealType + "啦！");
+        if (mealType=="锻炼"){
+            intent.putExtra("message", "该" + mealType + "啦！");
+        }
+        else{
+            intent.putExtra("message", "该吃" + mealType + "啦！");
+        }
         intent.putExtra("type", "1");
         intent.putExtra("mealType", mealType);
 
@@ -478,6 +514,12 @@ public class ReminderActivity extends AppCompatActivity {
         settings.append("晚餐提醒：").append(dinnerSwitch.isChecked() ? "开启" : "关闭");
         if (dinnerSwitch.isChecked()) {
             settings.append(" (").append(dinnerTimeText.getText()).append(")");
+        }
+        settings.append("\n");
+
+        settings.append("锻炼提醒：").append(exerciseSwitch.isChecked() ? "开启" : "关闭");
+        if (exerciseSwitch.isChecked()) {
+            settings.append(" (").append(exerciseTimeText.getText()).append(")");
         }
         settings.append("\n");
 

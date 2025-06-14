@@ -43,6 +43,10 @@
         <activity android:name=".activity.AddPostActivity"/>
         <activity android:name=".activity.AnnounceActivity"/>
         <activity android:name=".activity.PostDetailActivity"/>
+        <receiver android:name=".service.ReminderReceiver" android:exported="true" android:enabled="true" />
+        <activity android:name=".activity.UserManageActivity"/>
+        <activity android:name=".activity.PostManageActivity"/>
+        <activity android:name=".activity.CommentManageActivity"/>
     </application>
 
 </manifest>
