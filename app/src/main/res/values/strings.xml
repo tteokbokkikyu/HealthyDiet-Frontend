@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">healthydiet</string>
+    <string name="app_name">HealthyDiet</string>
+    <string-array name="gender_options">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+    <string-array name="activity_factor_options">
+        <item>久坐不动</item>
+        <item>轻度运动</item>
+        <item>中度运动</item>
+        <item>剧烈运动</item>
+        <item>超级剧烈运动</item>
+    </string-array>
+    <string-array name="tags_array">
+        <item>饮食</item>
+        <item>健康</item>
+        <item>运动</item>
+    </string-array>
 </resources>
