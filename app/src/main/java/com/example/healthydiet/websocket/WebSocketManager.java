@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WebSocketManager {
-    private static final String WS_URL = "ws://10.0.2.2:8080/hd/websocket";
+    private static final String WS_URL = "ws://47.110.58.252:8080/hd/websocket";
     private static WebSocketManager instance;
     private WebSocketClient webSocketClient;
     private Handler handler;
