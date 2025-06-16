@@ -19,30 +19,45 @@
         app:title="饮 食 管 理"
         app:titleTextAppearance="@style/ToolbarTitleStyle" />
 
-    <!-- 环形进度条包装在CardView中 -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/progressCardView"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+    <FrameLayout
+        android:id="@+id/chartContainer"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_marginTop="40dp"
-        app:cardBackgroundColor="#00FFFFFF"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <ProgressBar
-            android:id="@+id/circularProgressBar"
+        <!-- 绿色圆形背景 -->
+        <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:indeterminate="false"
-            android:indeterminateOnly="false"
-            android:max="2000"
-            android:progress="0"
-            android:progressDrawable="@drawable/record_progress" />
-    </androidx.cardview.widget.CardView>
+            android:background="@drawable/green_circle_background" />
+
+        <!-- 你的CardView和ProgressBar -->
+        <androidx.cardview.widget.CardView
+
+            android:id="@+id/progressCardView"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:cardBackgroundColor="#00FFFFFF"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="0dp"
+            android:layout_gravity="center">
+
+            <ProgressBar
+                android:id="@+id/circularProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="false"
+                android:indeterminateOnly="false"
+                android:max="2000"
+                android:progress="0"
+                android:progressDrawable="@drawable/record_progress" />
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
 
 
     <!-- 显示摄入的千卡数 -->
@@ -59,7 +74,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progressCardView" />
+        app:layout_constraintTop_toBottomOf="@id/chartContainer" />
 
     <Button
         android:id="@+id/details_button"
@@ -74,16 +89,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/caloriesTextView"
-        app:layout_constraintTop_toBottomOf="@id/progressCardView" />
+        app:layout_constraintTop_toBottomOf="@id/chartContainer" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/caloriesTextView">
+        app:layout_constraintTop_toBottomOf="@id/chartContainer">
 
         <Button
             android:id="@+id/breakfastButton"
@@ -141,57 +157,72 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linear" />
 
-    <TextView
-        android:id="@+id/weekCaloriesBurned"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="一周体重历史"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewRecordButton" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/weightTrendGraph"
-        android:layout_width="match_parent"
-        android:layout_height="197dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/weekCaloriesBurned" />
 
-    <TextView
-        android:id="@+id/BMI"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/weightCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="BMI:"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/weightTrendGraph"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#F2FAFFF6"
+        app:layout_constraintTop_toBottomOf="@id/viewRecordButton"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- 消耗热量 -->
-    <TextView
-        android:id="@+id/bodyFatPercentage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="体脂率:"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/BMI"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/weightTrendGraph"
+                android:layout_width="0dp"
+                android:layout_height="197dp"
+                android:background="@drawable/rounded_chart_area"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/BMI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="BMI: 21.3"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weightTrendGraph" />
+
+            <TextView
+                android:id="@+id/bodyFatPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="体脂率: 18%"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/BMI" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/circularButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerInParent="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="516dp"
+        android:elevation="10dp"
+        android:translationZ="32dp"
         app:backgroundTint="#8BC34A"
         app:icon="@drawable/ic_camera"
         app:iconSize="32dp"
         app:iconTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,24 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 背景圆形，代表进度条的轮廓 -->
-    <item android:id="@android:id/background">
-        <shape android:shape="ring">
-            <solid android:color="#009688"/>  <!-- 轮廓颜色，可以修改为你想要的颜色 -->
+    <!-- 圆形纯色背景 -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF" />  <!-- 你想要的圆形背景颜色 -->
             <size
-                android:width="10dp"
-                android:height="10dp"/>  <!-- 控制圆环的粗细 -->
+                android:width="100dp"
+                android:height="100dp" />
         </shape>
     </item>
 
-    <!-- 进度圆形，显示当前进度 -->
+    <!-- 背景环 -->
+    <item android:id="@android:id/background">
+        <shape android:shape="ring">
+            <solid android:color="#009688"/>
+            <size
+                android:width="10dp"
+                android:height="10dp"/>
+        </shape>
+    </item>
+
+    <!-- 进度环 -->
     <item android:id="@android:id/progress">
         <shape android:shape="ring">
             <gradient android:startColor="#F44336"
                 android:endColor="#fe9232"/>
             <size
                 android:width="10dp"
-                android:height="10dp"/>  <!-- 控制进度条的宽度 -->
+                android:height="10dp"/>
         </shape>
     </item>
 

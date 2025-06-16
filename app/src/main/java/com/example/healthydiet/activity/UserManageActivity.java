@@ -60,12 +60,12 @@ public class UserManageActivity extends AppCompatActivity {
                     User user = new User(
                             userJson.getString("name"),
                             userJson.getString("password"),
-                            userJson.getInt("weight"),
-                            userJson.getInt("age"),
-                            userJson.getInt("height"),
+                            userJson.optInt("weight", 0),            // 默认值为 0
+                            userJson.optInt("age", 0),
+                            userJson.optInt("height", 0),
                             userJson.getString("phone"),
-                            userJson.getInt("gender"),
-                            userJson.getDouble("activityFactor")
+                            userJson.optInt("gender", 0),
+                            userJson.optDouble("activityFactor", 1.2) // 默认活动因子为 1.2（常见默认值）
                     );
                     user.setUserId(userJson.getInt("id"));
                     user.setIsblocked(userJson.getInt("isBlocked"));

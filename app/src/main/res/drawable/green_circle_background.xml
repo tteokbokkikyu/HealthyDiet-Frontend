@@ -1,0 +1,4 @@
+<!-- res/drawable/green_circle_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="#F2F2FFE1" /> <!-- 半透明白色 -->
+</shape>

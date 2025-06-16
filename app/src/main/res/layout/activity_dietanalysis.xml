@@ -19,88 +19,109 @@
         app:titleTextAppearance="@style/ToolbarTitleStyle"
         app:navigationIcon="@android:drawable/ic_menu_revert"/>
 
-    <TextView
-        android:id="@+id/TextView1"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_analysis"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:fontFamily="cursive"
-        android:text="根据毛德倩公式，每日应摄入热量0千卡"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#040404"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <TextView
-        android:id="@+id/TextView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:fontFamily="cursive"
-        android:text="今日已摄入热量0千卡"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#040404"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TextView1"
-        />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="20dp"
-        android:indeterminate="false"
-        android:max="2000"
-        android:progress="50"
-        android:progressTint="#FF9800"
-        android:progressBackgroundTint="#BDBDBD"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TextView2" />
-
-    <TableLayout
-        android:id="@+id/table_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="16dp"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/TextView3"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_bar"></TableLayout>
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <TextView
-        android:id="@+id/TextView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:fontFamily="cursive"
-        android:text="系统根据你的个人状况为你推荐如下食物："
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#F44336"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/table_layout_food"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/table_layout" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-    <TableLayout
-        android:id="@+id/table_layout_food"
-        android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/TextView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="cursive"
+                android:text="根据毛德倩公式，每日应摄入热量0千卡"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="#004505"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/TextView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="cursive"
+                android:text="今日已摄入热量0千卡"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="#004505"
+                android:textSize="16sp" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:indeterminate="false"
+                android:max="2000"
+                android:progress="50"
+                android:progressTint="#FF9800"
+                android:progressBackgroundTint="#BDBDBD" />
+
+            <TableLayout
+                android:id="@+id/table_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:padding="16dp" >
+                <!-- 这里填充你的表格内容 -->
+            </TableLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_food_recommend"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
         android:padding="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@id/card_analysis"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TextView3"></TableLayout>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/TextView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="cursive"
+                android:text="系统根据你的个人状况为你推荐如下食物："
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="#004505"
+                android:textSize="18sp" />
+
+            <TableLayout
+                android:id="@+id/table_layout_food"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:padding="16dp" >
+                <!-- 填充你的食物推荐表格内容 -->
+            </TableLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
