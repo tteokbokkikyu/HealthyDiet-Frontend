@@ -8,7 +8,9 @@ public class ChatMessage {
         this.content = content;
         this.isUser = isUser;
     }
-
+    public void appendContent(String additionalContent) {
+        this.content += additionalContent;
+    }
     // 添加getter方法
     public String getContent() {
         return content;

@@ -81,39 +81,53 @@ public class LLMActivity extends AppCompatActivity {
         webSocketManager.logConnectionStatus();
 
         // 注册LLM回调
-        webSocketManager.registerCallback(WebSocketMessageType.ASK_LLM, message -> {
-            Log.d("LLM", "Received LLM response: " + message);
-            try {
-               // JSONObject json = new JSONObject(message);
-
-              //      String response = json.getString("data");
-                    runOnUiThread(() -> {
-                        addMessage(new ChatMessage(message, false)); // AI消息
-                        // 自动滚动到底部
-                        chatRecyclerView.smoothScrollToPosition(chatMessages.size() - 1);
-                    });
-
-            } catch (Exception e) {
-                Log.e("LLM", "Error processing message", e);
-                runOnUiThread(() ->
-                        Toast.makeText(this, "解析响应出错", Toast.LENGTH_SHORT).show()
-                );
-            }
-        });
 //        webSocketManager.registerCallback(WebSocketMessageType.ASK_LLM, message -> {
-//            runOnUiThread(() -> {
-//                try {
-//                    JSONObject json = new JSONObject(message);
+//            Log.d("LLM", "Received LLM response: " + message);
+//            try {
+//                    runOnUiThread(() -> {
+//                        addMessage(new ChatMessage(message, false)); // AI消息
+//                        // 自动滚动到底部
+//                        chatRecyclerView.smoothScrollToPosition(chatMessages.size() - 1);
+//                    });
 //
-//                        String response = json.getString("data");
-//                        addMessage(new ChatMessage(response, false)); // 添加AI消息
-//                        chatRecyclerView.smoothScrollToPosition(chatMessages.size() - 1); // 滚动到底部
-//
-//                } catch (Exception e) {
-//                    Toast.makeText(this, "显示消息出错", Toast.LENGTH_SHORT).show();
-//                }
-//            });
+//            } catch (Exception e) {
+//                Log.e("LLM", "Error processing message", e);
+//                runOnUiThread(() ->
+//                        Toast.makeText(this, "解析响应出错", Toast.LENGTH_SHORT).show()
+//                );
+//            }
 //        });
+        // 替换原来的 ASK_LLM 回调，新增 STREAM_CHUNK 回调
+        webSocketManager.registerCallback(WebSocketMessageType.ASK_LLM, message -> {
+            runOnUiThread(() -> {
+                try {
+                    // 获取当前最后一条消息（AI的回复）
+                    if (!chatMessages.isEmpty()) {
+                        ChatMessage lastMessage = chatMessages.get(chatMessages.size() - 1);
+
+                        // 如果是用户消息，需要新建AI消息
+                        if (lastMessage.isUser()) {
+                            ChatMessage newAiMessage = new ChatMessage(message, false);
+                            chatMessages.add(newAiMessage);
+                            chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+                        }
+                        // 如果是AI消息，则追加内容
+                        else {
+                            lastMessage.appendContent(message);
+                            chatAdapter.notifyItemChanged(chatMessages.size() - 1);
+                        }
+                    } else {
+                        // 特殊情况：没有消息时直接添加
+                        addMessage(new ChatMessage(message, false));
+                    }
+
+                    // 滚动到底部
+                    chatRecyclerView.smoothScrollToPosition(chatMessages.size() - 1);
+                } catch (Exception e) {
+                    Log.e("LLM", "处理流式消息出错", e);
+                }
+            });
+        });
         // 发送按钮点击事件
         sendButton.setOnClickListener(v -> sendMessage());
 
@@ -155,6 +169,7 @@ public class LLMActivity extends AppCompatActivity {
                 webSocketManager.reconnect();
             }
             webSocketManager.sendMessage(llmRequest);
+            addMessage(new ChatMessage("", false));
         } catch (Exception e) {
             Toast.makeText(this, "发送失败", Toast.LENGTH_SHORT).show();
             Log.e("LLM", "Send error", e);

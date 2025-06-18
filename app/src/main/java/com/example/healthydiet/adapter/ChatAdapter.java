@@ -78,6 +78,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void bind(ChatMessage message) {
             textView.setText(message.getContent());
             Log.d("ChatDebug", "绑定AI消息: " + message.getContent());
+            // 添加打字机效果（可选）
+         //   textView.setAlpha(0f);
+         //   textView.animate().alpha(1f).setDuration(200).start();
         }
     }
 }
