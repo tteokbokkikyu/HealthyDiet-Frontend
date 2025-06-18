@@ -28,6 +28,8 @@ public class WebSocketMessageType {
     public static final String UNBLOCK_USER="unblockUser";
     public static final String GET_ALL_POSTS="getAllPosts";
     public static final String GET_ALL_COMMENTS="getAllComments";
+    public static final String ASK_LLM="askLLM";
+    public static final String CLEAR_LLM="clearLLMHistory";
 
     // 添加其他消息类型...
 } 

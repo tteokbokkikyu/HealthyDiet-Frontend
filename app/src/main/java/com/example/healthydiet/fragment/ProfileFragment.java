@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.healthydiet.R;
+import com.example.healthydiet.activity.LLMActivity;
 import com.example.healthydiet.manager.UserManager;
 import com.example.healthydiet.activity.MainActivity;
 import com.example.healthydiet.activity.ModifyInfoActivity;
@@ -46,6 +47,7 @@ public class ProfileFragment extends Fragment {
     private Button reminderSettingsButton;
     private Button modify_info;
     private Button notification;
+    private Button llm;
     private WebSocketManager webSocketManager;
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 101;
     private static final int REQUEST_CODE_GALLERY = 100;
@@ -79,7 +81,7 @@ public class ProfileFragment extends Fragment {
                 .placeholder(R.drawable.ic_profile1)  // 加载中的占位图
                 .error(R.drawable.avater)  // 加载失败时的图片
                 .into(profileImageView);  // 设置到头像视图
-// 将头像设置为按钮并添加点击事件
+        // 将头像设置为按钮并添加点击事件
 
         profileImageView.setOnClickListener(v -> openGallery());
 
@@ -97,6 +99,7 @@ public class ProfileFragment extends Fragment {
             Intent intent = new Intent(getActivity(), ReminderActivity.class);
             startActivity(intent);
         });
+
         modify_info=view.findViewById(R.id.editProfileButton);
         modify_info.setOnClickListener(v -> {
             // 使用 Intent 跳转到新的 Activity
@@ -111,6 +114,12 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
+        llm=view.findViewById(R.id.llmButton);
+        llm.setOnClickListener(v -> {
+            // 使用 Intent 跳转到新的 Activity
+            Intent intent = new Intent(getActivity(), LLMActivity.class); // 这里的 NewActivity 是你想跳转到的 Activity
+            startActivity(intent);
+        });
         return view;
     }
     // 权限请求结果回调

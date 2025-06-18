@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WebSocketManager {
-    private static final String WS_URL = "ws://47.110.58.252:8080/hd/websocket";
+    //private static final String WS_URL = "ws://47.110.58.252:8080/hd/websocket";
+    private static final String WS_URL = "ws://10.0.2.2:8080/hd/websocket";
     private static WebSocketManager instance;
     private WebSocketClient webSocketClient;
     private Handler handler;
@@ -315,6 +316,24 @@ public class WebSocketManager {
                     String msg = get.getString("data");
                     Log.d("WebSocket", "Received array message, treating as comment list");
                     WebSocketCallback callback = callbackMap.get(WebSocketMessageType.WEIGHT_RECORD_GET);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
+                case LLM_QUERY_SUCCESS:{
+                    String msg = get.getString("data");
+                    Log.d("WebSocket", "Received llm message, treating as llm response");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.ASK_LLM);
+                    if (callback != null) {
+                        handler.post(() -> callback.onMessage(msg));
+                    }
+                    return;
+                }
+                case LLM_HISTORY_CLEARED:{
+                    String msg = get.getString("message");
+                    Log.d("WebSocket", "Received llm message, treating as llm response");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.CLEAR_LLM);
                     if (callback != null) {
                         handler.post(() -> callback.onMessage(msg));
                     }

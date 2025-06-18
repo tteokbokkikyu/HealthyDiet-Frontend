@@ -98,4 +98,21 @@
 
     </LinearLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/llmButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="26dp"
+        android:elevation="10dp"
+        android:translationZ="32dp"
+        app:backgroundTint="#8BC34A"
+        app:icon="@drawable/ic_robot"
+        app:iconSize="36dp"
+        app:iconTint="#FFFFFF"
+        app:cornerRadius="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
