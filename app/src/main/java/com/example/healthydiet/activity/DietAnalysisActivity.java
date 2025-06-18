@@ -1,21 +1,29 @@
 package com.example.healthydiet.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.healthydiet.R;
+import com.example.healthydiet.entity.ChatMessage;
+import com.example.healthydiet.entity.Recipe;
 import com.example.healthydiet.manager.UserManager;
 import com.example.healthydiet.entity.FoodItem;
 import com.example.healthydiet.entity.FoodRecord;
@@ -110,7 +118,6 @@ public class DietAnalysisActivity extends AppCompatActivity {
         addTableRow("钾",total_potassium+"毫克");
 
         User user = UserManager.getInstance().getUser();
-        tableLayoutfood = findViewById(R.id.table_layout_food);  // 获取 TableLayout
 
         double[] userProfile = {2000-total_calories, 2000*0.45f/4.0-total_carbohydrates, 25.0-total_dietaryFiber, 4700.0-total_potassium,1500.0-total_sodium, 2000*0.2f/9.0-total_fat, user.getWeight()*0.8-total_protein};
 
@@ -155,6 +162,34 @@ public class DietAnalysisActivity extends AppCompatActivity {
             webSocketManager.reconnect();
         }
         webSocketManager.sendMessage("getAllFood");
+        webSocketManager.registerCallback(WebSocketMessageType.RECIPE_LIST, message -> {
+            try {
+                JSONObject json = new JSONObject(message);
+                JSONObject data = json.getJSONObject("data");  // 先取data对象
+                String foodName = data.getString("foodName"); // 从data中取foodName
+                JSONArray recipeArray = data.getJSONArray("data"); // 从data中取食谱数组
+
+
+                List<Recipe> recipeList = new ArrayList<>();
+                for (int i = 0; i < recipeArray.length(); i++) {
+                    JSONObject recipeJson = recipeArray.getJSONObject(i);
+                    Recipe recipe = new Recipe(
+                            recipeJson.getString("title"),
+                            recipeJson.getString("description"),
+                            recipeJson.getInt("calories")
+                    );
+                    recipeList.add(recipe);
+                }
+
+                // 缓存这个食物对应的食谱（你可以用 Map 缓存后面优化）
+                runOnUiThread(() -> {
+                    updateRecipesForFood(foodName, recipeList);
+                });
+
+            } catch (Exception e) {
+                Log.e("RecipeList", "解析食谱出错：" + e.getMessage());
+            }
+        });
 
 
     }
@@ -180,58 +215,79 @@ public class DietAnalysisActivity extends AppCompatActivity {
         // 将新创建的 TableRow 添加到 TableLayout 中
         tableLayout.addView(tableRow);
     }
+
     private void displayRecommendedFoods(List<FoodItem> recommendedFoods) {
-        // 清空之前的推荐数据（如果有的话）
-        tableLayoutfood.removeAllViews();
+        LinearLayout container = findViewById(R.id.food_recommend_container);
+        container.removeAllViews();
 
-        // 每行最多放两个食物
-        int columnCount = 2;
-        TableRow tableRow = null;
+        for (FoodItem food : recommendedFoods) {
+            // 卡片外层 CardView
+            CardView cardView = new CardView(this);
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            cardParams.setMargins(32, 32, 32, 0);
+            cardView.setLayoutParams(cardParams);
+            cardView.setRadius(24f);
+            cardView.setCardElevation(10f);
+            cardView.setUseCompatPadding(true);
 
-        for (int i = 0; i < recommendedFoods.size(); i++) {
-            // 如果 tableRow 为空或者已经添加了两个元素，创建一个新的 TableRow
-            if (i % columnCount == 0) {
-                tableRow = new TableRow(this);
+            // 卡片内部 LinearLayout
+            LinearLayout cardLayout = new LinearLayout(this);
+            cardLayout.setOrientation(LinearLayout.VERTICAL);
+
+            // ===== 食物标题部分（有背景色） =====
+            TextView foodTitle = new TextView(this);
+            foodTitle.setText("🍽 推荐食物：" + food.getName() + "（" + food.getCalories() + " 千卡）");
+            foodTitle.setTextSize(20);
+            foodTitle.setTypeface(Typeface.DEFAULT_BOLD);
+            foodTitle.setTextColor(Color.WHITE);
+            foodTitle.setBackgroundColor(Color.parseColor("#66BB6A")); // 清新绿色
+            foodTitle.setPadding(32, 24, 32, 24);
+            cardLayout.addView(foodTitle);
+
+            // ===== 推荐食谱区域 =====
+            LinearLayout recipeListLayout = new LinearLayout(this);
+            recipeListLayout.setOrientation(LinearLayout.VERTICAL);
+            recipeListLayout.setBackgroundColor(Color.parseColor("#F5F5F5"));
+            recipeListLayout.setPadding(32, 24, 32, 24);
+
+            List<Recipe> recipes = getRecipesForFood(food);
+            for (int i = 0; i < recipes.size(); i++) {
+                Recipe recipe = recipes.get(i);
+
+                if (i > 0) {
+                    View divider = new View(this);
+                    LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, 1);
+                    dividerParams.setMargins(0, 16, 0, 16);
+                    divider.setLayoutParams(dividerParams);
+                    divider.setBackgroundColor(Color.parseColor("#CCCCCC"));
+                    recipeListLayout.addView(divider);
+                }
+
+                TextView recipeTitle = new TextView(this);
+                recipeTitle.setText("🍴 " + recipe.getTitle() + " - " + recipe.getCalories() + " 千卡");
+                recipeTitle.setTextSize(17);
+                recipeTitle.setTypeface(Typeface.DEFAULT_BOLD);
+                recipeTitle.setTextColor(Color.parseColor("#333333"));
+                recipeListLayout.addView(recipeTitle);
+
+                TextView recipeDesc = new TextView(this);
+                recipeDesc.setText(recipe.getDescription());
+                recipeDesc.setTextSize(15);
+                recipeDesc.setTextColor(Color.parseColor("#666666"));
+                recipeDesc.setPadding(16, 4, 0, 8);
+                recipeListLayout.addView(recipeDesc);
             }
 
-            // 获取当前食物
-            FoodItem food = recommendedFoods.get(i);
-
-            // 创建一个 LinearLayout 来垂直排列图片和文本
-            LinearLayout linearLayout = new LinearLayout(this);
-            linearLayout.setOrientation(LinearLayout.VERTICAL);  // 设置方向为垂直排列
-            linearLayout.setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            linearLayout.setGravity(Gravity.CENTER_HORIZONTAL); // 使整个 LinearLayout 在水平方向上居中
-
-            // 创建 TextView 显示食物名称
-            TextView nameTextView = new TextView(this);
-            nameTextView.setText(food.getName());
-            nameTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            nameTextView.setTextSize(18);
-            nameTextView.setPadding(16, 0, 16, 0);
-            linearLayout.addView(nameTextView);
-
-            // 创建 TextView 显示食物的热量
-            TextView caloriesTextView = new TextView(this);
-            caloriesTextView.setText(food.getCalories() + " kcal/100g");
-            caloriesTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            caloriesTextView.setTextSize(18);
-            caloriesTextView.setPadding(16, 0, 16, 0);
-            linearLayout.addView(caloriesTextView);
-
-            // 将 LinearLayout 添加到 TableRow 中
-            tableRow.addView(linearLayout);
-
-            // 如果当前行已满（即有两个元素），将 TableRow 添加到 TableLayout 中
-            if ((i + 1) % columnCount == 0 || i == recommendedFoods.size() - 1) {
-                tableLayoutfood.addView(tableRow);
-            }
+            // 合并内容进卡片
+            cardLayout.addView(recipeListLayout);
+            cardView.addView(cardLayout);
+            container.addView(cardView);
         }
     }
-
 
 
 
@@ -276,5 +332,74 @@ public class DietAnalysisActivity extends AppCompatActivity {
 
         return recommendedFoods;
     }
+    private List<Recipe> getRecipesForFood(FoodItem foodItem) {
+        // 发送食物名到后端请求推荐食谱
+
+            try{
+                String llmRequest = "getRecipes:{" +
+                        "\"foodName\": \"" + foodItem.getName()+ "\"," + "}";
+                Log.d("LLM", "Sending getRecipes message: " + llmRequest);
+
+                if (!webSocketManager.isConnected()) {
+                    Log.d("LLM", "WebSocket not connected, attempting to reconnect...");
+                    webSocketManager.reconnect();
+                }
+            webSocketManager.sendMessage(llmRequest);
+        } catch (Exception e) {
+            Log.e("WebSocket", "发送推荐食谱请求失败：" + e.getMessage());
+        }
+
+        // 这里可以返回一个空列表或占位数据，实际推荐结果由上面的 callback 异步回填
+        return new ArrayList<>();
+    }
+    private void updateRecipesForFood(String foodName, List<Recipe> recipes) {
+        LinearLayout container = findViewById(R.id.food_recommend_container);
+
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View cardView = container.getChildAt(i);
+            if (cardView instanceof CardView) {
+                CardView card = (CardView) cardView;
+                LinearLayout cardLayout = (LinearLayout) card.getChildAt(0);
+                TextView titleView = (TextView) cardLayout.getChildAt(0);
+                if (titleView.getText().toString().contains(foodName)) {
+                    // 找到对应的卡片，更新其食谱
+                    LinearLayout recipeListLayout = (LinearLayout) cardLayout.getChildAt(1);
+                    recipeListLayout.removeAllViews();
+
+                    for (int j = 0; j < recipes.size(); j++) {
+                        Recipe recipe = recipes.get(j);
+
+                        if (j > 0) {
+                            View divider = new View(this);
+                            LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT, 1);
+                            dividerParams.setMargins(0, 16, 0, 16);
+                            divider.setLayoutParams(dividerParams);
+                            divider.setBackgroundColor(Color.parseColor("#CCCCCC"));
+                            recipeListLayout.addView(divider);
+                        }
+
+                        TextView recipeTitle = new TextView(this);
+                        recipeTitle.setText("🍴 " + recipe.getTitle() + " - " + recipe.getCalories() + " 千卡");
+                        recipeTitle.setTextSize(17);
+                        recipeTitle.setTypeface(Typeface.DEFAULT_BOLD);
+                        recipeTitle.setTextColor(Color.parseColor("#333333"));
+                        recipeListLayout.addView(recipeTitle);
+
+                        TextView recipeDesc = new TextView(this);
+                        recipeDesc.setText(recipe.getDescription());
+                        recipeDesc.setTextSize(15);
+                        recipeDesc.setTextColor(Color.parseColor("#666666"));
+                        recipeDesc.setPadding(16, 4, 0, 8);
+                        recipeListLayout.addView(recipeDesc);
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+
+
 
 }

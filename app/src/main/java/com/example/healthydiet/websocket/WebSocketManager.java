@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WebSocketManager {
-    //private static final String WS_URL = "ws://47.110.58.252:8080/hd/websocket";
     private static final String WS_URL = "ws://10.0.2.2:8080/hd/websocket";
     private static WebSocketManager instance;
     private WebSocketClient webSocketClient;
@@ -321,35 +320,12 @@ public class WebSocketManager {
                     }
                     return;
                 }
-//                case LLM_QUERY_SUCCESS:{
-//                    String msg = get.getString("data");
-//                    Log.d("WebSocket", "Received llm message, treating as llm response");
-//                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.ASK_LLM);
-//                    if (callback != null) {
-//                        handler.post(() -> callback.onMessage(msg));
-//                    }
-//                    return;
-//                }
-                case LLM_STREAM_CHUNK:{
-                    String msg = get.getString("stream_chunk");
-                    Log.d("WebSocket", "Received llm chunk, treating as llm response");
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.ASK_LLM);
+                case RECIPE_LIST: {
+                    String msg = get.getString("data");
+                    Log.d("WebSocket", "Received recipe list for food");
+                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.RECIPE_LIST);
                     if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
-                    }
-                    return;
-                }
-                case LLM_STREAM_COMPLETE: {
-                    Log.d("WebSocket", "Stream ended");
-                    // 可以在这里添加"思考中..."消失的逻辑
-                    break;
-                }
-                case LLM_HISTORY_CLEARED:{
-                    String msg = get.getString("message");
-                    Log.d("WebSocket", "Received llm message, treating as llm response");
-                    WebSocketCallback callback = callbackMap.get(WebSocketMessageType.CLEAR_LLM);
-                    if (callback != null) {
-                        handler.post(() -> callback.onMessage(msg));
+                        handler.post(() -> callback.onMessage(message));
                     }
                     return;
                 }

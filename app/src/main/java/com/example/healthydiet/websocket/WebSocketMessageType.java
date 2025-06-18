@@ -30,6 +30,9 @@ public class WebSocketMessageType {
     public static final String GET_ALL_COMMENTS="getAllComments";
     public static final String ASK_LLM="askLLM";
     public static final String CLEAR_LLM="clearLLMHistory";
+    public static final String RECIPE_LIST="recipeList";
+    public static final String RECIPE_FAIL="recipeFail";
+
 
     // 添加其他消息类型...
 } 
