@@ -73,7 +73,7 @@ public class LLMActivity extends AppCompatActivity {
         chatRecyclerView.setAdapter(chatAdapter);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String initialAImessage="你好！我是你的智能助手，有什么饮食、运动或健康方面的问题需要我为你解答吗？";
+        String initialAImessage="你好！我是你的智能助手，可以为你提供量身定制的饮食、运动或健康方面的建议，有什么问题需要我为你解答吗？";
         addMessage(new ChatMessage(initialAImessage, false)); // AI消息
 
         // 初始化WebSocket
